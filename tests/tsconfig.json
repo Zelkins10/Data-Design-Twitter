@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "mapRoot": "./src/",
+    //"module": "none",
+    "module": "system",
+    "outFile": "./build/build.js",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "rootDir": "src",
+    "sourceMap": true,
+    "sourceRoot": "./src/",
+    "target": "es5"
+  },
+
+  "include": [
+    "custom-typings"
+  ]
+}
