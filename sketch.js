@@ -23,6 +23,7 @@ function preload(){
   //my table is comma separated value "csv"
   //and has a header specifying the columns labels
   tableTwitter = loadTable('twitter.csv', 'csv', 'header');
+  tableFacebook = loadTable('facebook.csv', 'csv', 'header');
   tableYT = loadTable('youtube.csv', 'csv', 'header');
   
   Montserrat = loadFont('Montserrat-Bold.ttf');
@@ -42,6 +43,21 @@ function setup(){
   
   wordsYT = tableYT.getColumn('words')
   countYT = tableYT.getColumn('count')
+
+  wordsFacebook = tableFacebook.getColumn('words')
+  countFacebook = tableFacebook.getColumn('count')
+
+  // Création d'une table des mots communs aux RS
+  /*
+    function createCommonTable(table1, table2){
+        table3 = 
+        for(let i=0; i<max(table1.length, table2.length); i++){
+            if
+        }
+  }
+  */
+  
+
   print(countTwitter);
   //["12", "12", "4", etc.]
 
@@ -103,27 +119,41 @@ function draw(){
   noStroke();
   fill(51, 255, 0, 50);
 
-  // Tracé des carrés correspondant aux mots Twitter
-  textFont(Montserrat);
-  for (let t = 0; t < countTwitter.length; t++){
-    tailleTxt = map(countTwitter[t], getMinOccurrencesFromTableCount_v2(countTwitter), getMaxOccurrencesFromTableCount_v2(countTwitter), 8, width/8) // remplacer 1 et 157 par le min de count et le max de count (trouver les bonnes fonctions)
-    textSize(tailleTxt); // count[t] // Math.exp(count[t])
-    fill(random(0,100), random(80,220), random(200,255), map(tailleTxt, 12, width/8, 255, 50))
+  let colorShift = 20;
 
-    text(wordsTwitter[t], random(0, width - 650), random(60, height - 320));
-}
+    // Tracé du nuage correspondant aux mots Twitter
+    textFont(Montserrat);
+    for (let t = 0; t < countTwitter.length; t++){
+        tailleTxt = map(countTwitter[t], getMinOccurrencesFromTableCount_v2(countTwitter), getMaxOccurrencesFromTableCount_v2(countTwitter), 8, width/8)
+        textSize(tailleTxt); // count[t] // Math.exp(count[t])
+        fill(random(56 - colorShift, 56 + colorShift), random(161 - colorShift, 161 + colorShift), random(243 - colorShift, 243 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
+
+        text(wordsTwitter[t], random(0, width - 650), random(60, height/2));
+    } 
   
-  /*
-    // Tracé des carrés correspondant aux mots YT
-  textFont(Montserrat);
-  for (let t = 0; t < countYT.length; t++){
-    tailleTxt = map(countYT[t], 1, 157, 12, width/8) // remplacer 1 et 157 par le min de count et le max de count (trouver les bonnes fonctions)
-    textSize(tailleTxt); // count[t] // Math.exp(count[t])
-    fill(random(0,100), random(80,220), random(200,255), 255)
-    text(words[t], random(0, width - 200), random(60, height - 20));
-}
-  */
+  
+    // Tracé du nuage correspondant aux mots FB
+    textFont(Montserrat);
+    for (let t = 0; t < countFacebook.length; t++){
+        tailleTxt = map(countFacebook[t], getMinOccurrencesFromTableCount_v2(countFacebook), getMaxOccurrencesFromTableCount_v2(countFacebook), 8, width/8)
+        textSize(tailleTxt); // count[t] // Math.exp(count[t])
+        fill(random(46,86), random(83,123), random(178,198), map(tailleTxt, 12, width/8, 255, 50))
 
+        text(wordsFacebook[t], random(width/2, width), random(60, height/2));
+    } 
+  
+    // Tracé du nuage correspondant aux mots table commune
+    let tailleTexteFixe = 14;
+    textFont(Montserrat);
+    for (let t = 0; t < max(countFacebook.length, countTwitter.length); t++){
+        tailleTxt = tailleTexteFixe
+        textSize(tailleTxt); // count[t] // Math.exp(count[t])
+        fill(random(189 - colorShift, 189 + colorShift), random(55 - colorShift, 55 + colorShift), random(55 - colorShift, 55 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
+
+        if(wordsTwitter[t] == wordsFacebook[t]){ // Réparer ce passage en utilisant directement la liste des mots communs à créer préalablement
+            text(wordsFacebook[t], random(width/3, 2*width/3), random(height/2, height - 46));
+        }
+    } 
   
   //save("mySVG.svg"); // give file name
   //print("saved svg");
