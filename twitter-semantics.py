@@ -33,7 +33,7 @@ auth = tw.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tw.API(auth, wait_on_rate_limit=True)
 
-search_term = "#twitter+algorithm -filter:retweets"
+search_term = "#facebook+algorithm -filter:retweets"
 
 tweets = tw.Cursor(api.search_tweets,
                    q=search_term,
@@ -103,7 +103,7 @@ fig, ax = plt.subplots(figsize=(8, 8))
 
 # plt.show()
 
-clean_tweets_nsw.to_csv('twitter.csv', index=False)
+clean_tweets_nsw.to_csv('facebook.csv', index=False)
 print('csv saved')
 
 #--------------------------

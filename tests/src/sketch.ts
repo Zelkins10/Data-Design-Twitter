@@ -1,4 +1,4 @@
-import { loadFont } from 'p5Global';
+//import { loadFont } from 'p5Global';
 
 // -------------------
 //  Parameters and UI
@@ -23,6 +23,14 @@ gui.add(params, "Download_Image")
 
 let tableTwitter;
 let tableYT;
+
+var wordsTwitter;
+var countTwitter;
+var countYT;
+var wordsYT;
+var Montserrat;
+var tailleTxt;
+
 
 //var RobotoMono;
 

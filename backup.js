@@ -55,7 +55,7 @@ function setup(){
   // Initialisation des fonctions d'aléatoire
   randomSeed(params.random_and_noise_Seed)
   noiseSeed(params.random_and_noise_Seed)
-
+  
 }
 
 function map(number, inMin, inMax, outMin, outMax) {
@@ -79,18 +79,9 @@ function getMaxOccurrencesFromTableCount_v2(countRS){
 
 // Get min count from each social media:
 function getMinOccurrencesFromTableCount(countRS){
-    let minCount = 1; // Attention bricolage par ici (le 1 est arbirtraire)
-    for(let i=0; i<countRS.length; i++){
-        if(countRS[i] < minCount){
-            minCount = countRS[i];
-        }
-    }
-    return minCount
-}
-
-function getMinOccurrencesFromTableCount_v2(countRS){
     return countRS[countRS.length - 1]
 }
+
 
 
 // -------- Drawing -------
@@ -106,11 +97,10 @@ function draw(){
   // Tracé des carrés correspondant aux mots Twitter
   textFont(Montserrat);
   for (let t = 0; t < countTwitter.length; t++){
-    tailleTxt = map(countTwitter[t], getMinOccurrencesFromTableCount_v2(countTwitter), getMaxOccurrencesFromTableCount_v2(countTwitter), 8, width/8) // remplacer 1 et 157 par le min de count et le max de count (trouver les bonnes fonctions)
+    tailleTxt = map(countTwitter[t], getMinOccurrencesFromTableCount(countTwitter), getMaxOccurrencesFromTableCount_v2(countTwitter), 12, width/8) // remplacer 1 et 157 par le min de count et le max de count (trouver les bonnes fonctions)
     textSize(tailleTxt); // count[t] // Math.exp(count[t])
-    fill(random(0,100), random(80,220), random(200,255), map(tailleTxt, 12, width/8, 255, 50))
-
-    text(wordsTwitter[t], random(0, width - 650), random(60, height - 320));
+    fill(random(0,100), random(80,220), random(200,255), 255*(width/8)/tailleTxt)
+    text(wordsTwitter[t], random(0, width - 200), random(60, height - 20));
 }
   
   /*
