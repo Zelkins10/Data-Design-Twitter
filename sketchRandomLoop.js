@@ -10,6 +10,14 @@
 let tableTwitter;
 let tableYT;
 
+let t0 = 0;
+
+// time delay vars
+// current time "snapshot" (imagine pressing the lap time button)
+//var time;
+// the interval to wait between time "snapshots": 2s (2000 milliseconds) in this case
+//var wait = 2000;
+
 //var RobotoMono;
 
 const params = {
@@ -27,11 +35,13 @@ function preload(){
   tableYT = loadTable('youtube.csv', 'csv', 'header');
   
   Montserrat = loadFont('Montserrat-Bold.ttf');
+  MontserratReg = loadFont('Montserrat-Regular.ttf');
 
 }
 
 
 function setup(){
+    frameRate(10);
   createCanvas(960, 640); // Create SVG Canvas // , SVG
   
   //count the columns
@@ -64,7 +74,11 @@ function setup(){
   
   // Initialisation des fonctions d'aléatoire
   randomSeed(params.random_and_noise_Seed)
-  noiseSeed(params.random_and_noise_Seed)
+  //noiseSeed(params.random_and_noise_Seed)
+
+    //store the current time
+    //time = millis();
+
 
 }
 
@@ -122,7 +136,7 @@ function createCommonTable(table1, table2){
         for(let t2=0; t2<countTable2.length; t2++){
             if(wordsTable1[t1] == wordsTable2[t2]){
                 table3.words[t1] = wordsTable1[t1];
-                table3.count[t1] = (countTable1[t1])/2; // + countTable2[t2] avant la parenthèse fermante bugge (on obtient trop grd count résultant)
+                table3.count[t1] = (countTable1[t1]); // + countTable2[t2])/2 à la fin bugge (on obtient trop grd count résultant)
             }
         }
     }
@@ -162,11 +176,18 @@ function removeCommonElementsInTable(table1, table2){
     return table3;
 }
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 // -------- Drawing -------
 
 
 function draw(){
+    random(params.random_and_noise_Seed)
+
+    t0 += 3;
   background(28, 28, 28);
 
 
@@ -191,11 +212,12 @@ function draw(){
     textFont(Montserrat);
     
     for (let t = 0; t < countTwitterWithoutFb.length; t++){
-        if(wordsTwitterWithoutFb[t] != undefined){
+        if(wordsTwitterWithoutFb[t] != undefined && t<t0){ //&& millis() - time >= wait
             tailleTxt = map(countTwitterWithoutFb[t], getMinOccurrencesFromTableCount_v2(countTwitterWithoutFb), getMaxOccurrencesFromTableCount(countTwitterWithoutFb), 8, width/8)
             textSize(tailleTxt); // count[t] // Math.exp(count[t])
             fill(random(56 - colorShift, 56 + colorShift), random(161 - colorShift, 161 + colorShift), random(243 - colorShift, 243 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
             text(wordsTwitterWithoutFb[t], random(0, width - 650), random(60, height/2));
+            //time = millis();
         }
     }
     
@@ -212,12 +234,12 @@ function draw(){
     //print(tableFbWithoutTwitter);
     
 
-    textFont(Montserrat);
+    
     for (let t = 0; t < countFbWithoutTwitter.length; t++){
-        if(wordsFbWithoutTwitter[t] != undefined){
+        if(wordsFbWithoutTwitter[t] != undefined && t<t0){
             tailleTxt = map(countFbWithoutTwitter[t], getMinOccurrencesFromTableCount_v2(countFbWithoutTwitter), getMaxOccurrencesFromTableCount(countFbWithoutTwitter), 8, width/8)
             textSize(tailleTxt); // count[t] // Math.exp(count[t])
-            fill(random(46,86), random(83,123), random(178,198), map(tailleTxt, 12, width/8, 255, 50))
+            fill(random(46,86), random(83,123), random(158,198), map(tailleTxt, 12, width/8, 255, 50))
             text(wordsFbWithoutTwitter[t], random(width/2, width - 200), random(60, height/2));
         }
     } 
@@ -244,23 +266,43 @@ function draw(){
 
     let tailleTexteFixe = 14;
 
-    textFont(Montserrat);
+
     for (let t = 0; t < tableCommune.count.length; t++){
-        if(wordsCommune[t] != undefined){
+        if(wordsCommune[t] != undefined && t<t0){
             tailleTxt = map(countCommune[t], getMinOccurrencesFromTableCount_v2(countCommune), getMaxOccurrencesFromTableCount(countCommune), 8, width/8)
             textSize(tailleTxt); // count[t] // Math.exp(count[t])
             fill(random(189 - colorShift, 189 + colorShift), random(55 - colorShift, 55 + colorShift), random(55 - colorShift, 55 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
-            text(wordsCommune[t], random(width/8, 7*width/8), random(height/2 + 60, height - 46));
+            text(wordsCommune[t], random(width/8 - 20, 7*width/8), random(height/2 + 60, height - 90));
         }
     } 
 
     // ---------- LEGENDE ------------
-    textSize(12);
+    textSize(11);
     textAlign(CENTER);
     fill(240,240,240);
     text("Nuages de mots mettant en avant les termes les plus tweetés au sujet des algorithmes de Twitter et de Facebook (source : API Twitter)", width/2, height - 20);
   
+    textFont(MontserratReg);
+    textAlign(LEFT);
+
+    fill(56,161,243);
+    text("Termes spécifiques aux tweets discutant de l'algorithme de Twitter", 10, height - 69);
+
+    fill(66,103,178);
+    text("Termes spécifiques aux tweets discutant de l'algorithme de Facebook", 10, height - 57);
+
+    fill(189,55,55);
+    text("Termes communs aux tweets discutant de ces deux algorithmes", 10, height - 45);
+
   //save("mySVG.svg"); // give file name
   //print("saved svg");
-  noLoop(); // we just want to export once
+  //noLoop(); // we just want to export once
+    
+    // wait 2s then call draw() manually
+    //delay(2000).then(draw);
+
+    if(t0 >= max(countTwitterWithoutFb.length, countFbWithoutTwitter.length, countCommune.length)){
+        noLoop();
+    }
+    
 }
