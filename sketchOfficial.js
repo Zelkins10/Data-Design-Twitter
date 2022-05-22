@@ -1,29 +1,10 @@
-// Objectif
-
-// Given the following CSV file called "numbers.csv"
-// located in the project's root folder:
-//
-// words,count
-//example:
-//algorithm,12
+// Projet Twitter (sujet 1)
 
 let tableTwitter;
 let tableYT;
 
-let t0 = 0;
-
-// time delay vars
-// current time "snapshot" (imagine pressing the lap time button)
-//var time;
-// the interval to wait between time "snapshots": 2s (2000 milliseconds) in this case
-//var wait = 2000;
-
-//var RobotoMono;
-
 const params = {
-
     random_and_noise_Seed: 4,
-
 }
 
 
@@ -32,7 +13,6 @@ function preload(){
   //and has a header specifying the columns labels
   tableTwitter = loadTable('twitter.csv', 'csv', 'header');
   tableFacebook = loadTable('facebook.csv', 'csv', 'header');
-  tableYT = loadTable('youtube.csv', 'csv', 'header');
   
   Montserrat = loadFont('Montserrat-Bold.ttf');
   MontserratReg = loadFont('Montserrat-Regular.ttf');
@@ -45,14 +25,11 @@ function setup(){
   createCanvas(960, 640); // Create SVG Canvas // , SVG
   
   //count the columns
-  print(tableTwitter.getRowCount() + ' total rows in table');
-  print(tableTwitter.getColumnCount() + ' total columns in table');
+  //print(tableTwitter.getRowCount() + ' total rows in table');
+  //print(tableTwitter.getColumnCount() + ' total columns in table');
 
   wordsTwitter = tableTwitter.getColumn('words')
   countTwitter = tableTwitter.getColumn('count')
-  
-  wordsYT = tableYT.getColumn('words')
-  countYT = tableYT.getColumn('count')
 
   wordsFacebook = tableFacebook.getColumn('words')
   countFacebook = tableFacebook.getColumn('count')
@@ -60,26 +37,18 @@ function setup(){
 
 
 
-  print("tyoe of tableTwitter is ")
+  //print("tyoe of tableTwitter is ")
   //console.log(typeof tableTwitter);
-  print(typeof tableTwitter);
+  //print(typeof tableTwitter);
 
   //print(countTwitter);
   //print(countFacebook);
 
-
   //["12", "12", "4", etc.]
 
-
-  
   // Initialisation des fonctions d'aléatoire
   randomSeed(params.random_and_noise_Seed)
   //noiseSeed(params.random_and_noise_Seed)
-
-    //store the current time
-    //time = millis();
-
-
 }
 
 function map(number, inMin, inMax, outMin, outMax) {
@@ -103,7 +72,7 @@ function getMaxOccurrencesFromTableCount_v2(countRS){
 
 // Get min count from each social media:
 function getMinOccurrencesFromTableCount(countRS){
-    let minCount = 1; // Attention bricolage par ici (le 1 est arbirtraire)
+    let minCount = 1; // Attention bricolage par ici (le 1 est arbitraire)
     for(let i=0; i<countRS.length; i++){
         if(countRS[i] < minCount){
             minCount = countRS[i];
@@ -117,8 +86,6 @@ function getMinOccurrencesFromTableCount_v2(countRS){
 }
 
   // Création d'une table des mots communs aux RS
-  
-  
 function createCommonTable(table1, table2){
 
     wordsTable1 = table1.getColumn('words')
@@ -186,7 +153,6 @@ async function writeAsyncWordClouds(){
 
   background(28, 28, 28);
 
-
   noStroke();
   fill(51, 255, 0, 50);
 
@@ -205,13 +171,6 @@ async function writeAsyncWordClouds(){
     wordsTwitterWithoutFb = tableTwitterWithoutFb.words;
     countTwitterWithoutFb = tableTwitterWithoutFb.count;
 
-    /*
-    print("test table TwitterWithoutFb : "); // DEBUG
-    print(tableTwitterWithoutFb);
-    print("test max occurence v1 de table TwitterWithoutFb : ")
-    print(getMaxOccurrencesFromTableCount(countTwitterWithoutFb))
-    */
-
     textFont(Montserrat);
     textAlign(CENTER);
     
@@ -224,7 +183,6 @@ async function writeAsyncWordClouds(){
             await delay(50);
         }
     }
-    
   
   
     // --------------------Tracé du nuage correspondant aux mots FB------------------
@@ -238,10 +196,6 @@ async function writeAsyncWordClouds(){
     tableFbWithoutTwitter = removeCommonElementsInTable(tableFacebook, tableTwitter);
     wordsFbWithoutTwitter = tableFbWithoutTwitter.words;
     countFbWithoutTwitter = tableFbWithoutTwitter.count;
-
-    
-    //print("test table Fb sans twitter : "); // DEBUG
-    //print(tableFbWithoutTwitter);
     
     textFont(Montserrat);
     textAlign(CENTER);
@@ -267,21 +221,15 @@ async function writeAsyncWordClouds(){
     wordsCommune = tableCommune.words;
     countCommune = tableCommune.count;
 
-    print("test table commune : ");
-    print(tableCommune); // MARCHE
-
-    //print("test 1er mot de table commune : ");
-    //print(wordsCommune.words[0]);
-
     //cycle through the table to print the table DEBUG
+    /*
     for (let r = 0; r < countCommune.length; r++){
         for (let c = 0; c < 2; c++){ // 2 colonnes dans la table
         print(tableCommune.words[r]);
         print(tableCommune.count[r]);
         }
     }
-
-    let tailleTexteFixe = 14;
+    */
 
     textFont(Montserrat);
     textAlign(CENTER);
@@ -295,7 +243,7 @@ async function writeAsyncWordClouds(){
         }
     } 
 
-    // ---------- LEGENDE ------------
+    // ---------- TITRE ------------
     textSize(11);
     textAlign(CENTER);
     fill(240,240,240);
@@ -307,21 +255,9 @@ async function writeAsyncWordClouds(){
 
 
 function draw(){
-
-
-
-
-
-  //noLoop(); // we just want to export once
-    
-    // wait 2s then call draw() manually
-    //delay(2000).then(draw);
-
     writeAsyncWordClouds();
-
     noLoop();
 
     //save("mySVG.svg"); // give file name
     //print("saved svg");
-    
 }
