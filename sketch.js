@@ -191,7 +191,7 @@ function draw(){
     textFont(Montserrat);
     
     for (let t = 0; t < countTwitterWithoutFb.length; t++){
-        if(wordsTwitterWithoutFb[t] != 'undefined'){
+        if(wordsTwitterWithoutFb[t] != undefined){
             tailleTxt = map(countTwitterWithoutFb[t], getMinOccurrencesFromTableCount_v2(countTwitterWithoutFb), getMaxOccurrencesFromTableCount(countTwitterWithoutFb), 8, width/8)
             textSize(tailleTxt); // count[t] // Math.exp(count[t])
             fill(random(56 - colorShift, 56 + colorShift), random(161 - colorShift, 161 + colorShift), random(243 - colorShift, 243 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
@@ -214,10 +214,12 @@ function draw(){
 
     textFont(Montserrat);
     for (let t = 0; t < countFbWithoutTwitter.length; t++){
-        tailleTxt = map(countFbWithoutTwitter[t], getMinOccurrencesFromTableCount_v2(countFbWithoutTwitter), getMaxOccurrencesFromTableCount(countFbWithoutTwitter), 8, width/8)
-        textSize(tailleTxt); // count[t] // Math.exp(count[t])
-        fill(random(46,86), random(83,123), random(178,198), map(tailleTxt, 12, width/8, 255, 50))
-        text(wordsFbWithoutTwitter[t], random(width/2, width - 200), random(60, height/2));
+        if(wordsFbWithoutTwitter[t] != undefined){
+            tailleTxt = map(countFbWithoutTwitter[t], getMinOccurrencesFromTableCount_v2(countFbWithoutTwitter), getMaxOccurrencesFromTableCount(countFbWithoutTwitter), 8, width/8)
+            textSize(tailleTxt); // count[t] // Math.exp(count[t])
+            fill(random(46,86), random(83,123), random(178,198), map(tailleTxt, 12, width/8, 255, 50))
+            text(wordsFbWithoutTwitter[t], random(width/2, width - 200), random(60, height/2));
+        }
     } 
   
     // -----------------Tracé du nuage correspondant aux mots table commune-------------------
@@ -244,7 +246,7 @@ function draw(){
 
     textFont(Montserrat);
     for (let t = 0; t < tableCommune.count.length; t++){
-        if(wordsCommune[t] != 'undefined'){
+        if(wordsCommune[t] != undefined){
             tailleTxt = map(countCommune[t], getMinOccurrencesFromTableCount_v2(countCommune), getMaxOccurrencesFromTableCount(countCommune), 8, width/8)
             textSize(tailleTxt); // count[t] // Math.exp(count[t])
             fill(random(189 - colorShift, 189 + colorShift), random(55 - colorShift, 55 + colorShift), random(55 - colorShift, 55 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
