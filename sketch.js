@@ -47,26 +47,20 @@ function setup(){
   wordsFacebook = tableFacebook.getColumn('words')
   countFacebook = tableFacebook.getColumn('count')
 
-  // Création d'une table des mots communs aux RS
-  /*
-    function createCommonTable(table1, table2){
-        table3 = 
-        for(let i=0; i<max(table1.length, table2.length); i++){
-            if
-        }
-  }
-  */
-  
 
-  print(countTwitter);
+
+
+  print("tyoe of tableTwitter is ")
+  //console.log(typeof tableTwitter);
+  print(typeof tableTwitter);
+
+  //print(countTwitter);
+  //print(countFacebook);
+
+
   //["12", "12", "4", etc.]
 
-  //cycle through the table
-  for (let r = 0; r < tableTwitter.getRowCount(); r++){
-    for (let c = 0; c < tableTwitter.getColumnCount(); c++){
-      print(tableTwitter.getString(r, c));
-    }
-  }
+
   
   // Initialisation des fonctions d'aléatoire
   randomSeed(params.random_and_noise_Seed)
@@ -108,6 +102,34 @@ function getMinOccurrencesFromTableCount_v2(countRS){
     return countRS[countRS.length - 1]
 }
 
+  // Création d'une table des mots communs aux RS
+  
+  
+  function createCommonTable(table1, table2){
+
+    wordsTable1 = table1.getColumn('words')
+    countTable1 = table1.getColumn('count')
+
+    wordsTable2 = table2.getColumn('words')
+    countTable2 = table2.getColumn('count')
+
+    var table3 = {
+        words: [],
+        count: []
+      };
+
+    for(let t1=0; t1<countTable1.length; t1++){
+        for(let t2=0; t2<countTable2.length; t2++){
+            if(wordsTable1[t1] == wordsTable2[t2]){
+                table3.words[t1] = wordsTable1[t1];
+                table3.count[t1] = (countTable1[t1] + countTable2[t2])/2;
+            }
+        }
+    }
+
+    return table3;
+}
+
 
 // -------- Drawing -------
 
@@ -143,16 +165,33 @@ function draw(){
     } 
   
     // Tracé du nuage correspondant aux mots table commune
+
+    tableCommune = createCommonTable(tableTwitter, tableFacebook);
+    wordsCommune = tableCommune.words;
+    countCommune = tableCommune.count;
+
+    print("test table commune : ");
+    print(tableCommune);
+
+    //print("test 1er mot de table commune : ");
+    //print(wordsCommune.words[0]);
+
+    //cycle through the table to print the table DEBUG
+    for (let r = 0; r < countCommune.length; r++){
+        for (let c = 0; c < 2; c++){ // 2 colonnes dans la table
+        print(tableCommune.words[r]);
+        print(tableCommune.count[r]);
+        }
+    }
+
     let tailleTexteFixe = 14;
+
     textFont(Montserrat);
-    for (let t = 0; t < max(countFacebook.length, countTwitter.length); t++){
+    for (let t = 0; t < tableCommune.count.length; t++){
         tailleTxt = tailleTexteFixe
         textSize(tailleTxt); // count[t] // Math.exp(count[t])
         fill(random(189 - colorShift, 189 + colorShift), random(55 - colorShift, 55 + colorShift), random(55 - colorShift, 55 + colorShift), map(tailleTxt, 12, width/8, 255, 50))
-
-        if(wordsTwitter[t] == wordsFacebook[t]){ // Réparer ce passage en utilisant directement la liste des mots communs à créer préalablement
-            text(wordsFacebook[t], random(width/3, 2*width/3), random(height/2, height - 46));
-        }
+        text(wordsCommune[t], random(width/8, 7*width/8), random(height/2 + 60, height - 46));
     } 
   
   //save("mySVG.svg"); // give file name
